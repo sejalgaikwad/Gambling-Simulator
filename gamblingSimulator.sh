@@ -45,8 +45,8 @@ function luckiestUnlukiest(){
 	gameRecord[Day_0]=0
 	for((j=1;j<=20;j++))
    do
-		k=$(( $j - 1 ))
-      gameRecord[Day_$j]=$(( ${gameRecord[Day_$j]} + ${gameRecord[Day_$k]} ))
+		lastDay=$(( $j - 1 ))
+      gameRecord[Day_$j]=$(( ${gameRecord[Day_$j]} + ${gameRecord[Day_$lastDay]} ))
 		echo  "Day$j	"${gameRecord[Day_$j]}
    done | sort -k2 -nr |awk 'NR==20{print "Unluckiest: " $0}AND NR==1{print "Luckiest: " $0}'
 }
@@ -55,6 +55,19 @@ function main(){
 	dailyResult 
 	dailyProfit
 	luckiestUnlukiest
-	echo "Total profit" $( printf "%s\n" ${gameRecord[@]} | awk '{sum+=$0}END{print sum}')
+	profit=$( printf "%s\n" ${gameRecord[@]} | awk '{sum+=$0}END{print sum}')
+	echo "Profit " $profit
+	continuePlay $profit
 }
+
+function continuePlay(){
+	profit=$1
+	if [ $profit -gt 0 ]
+	then
+		main 
+	else
+		echo "Thanks for playing!!!"
+	fi
+}
+
 main
