@@ -31,13 +31,15 @@ do
 		fi
 	done
 	outCome=$(( $STAKE - 100 ))
-	gameRecord["Day_$day"]=$win" "$loss
+	gameRecord["Day_$day"]=$outCome
 	done
 }
 
 dailyResult
 
-for i in ${!gameRecord[@]}
+for((j=1;j<=20;j++))
 do
-	echo "$i ${gameRecord[$i]}"
-done | sort -k2 -n
+	echo "Day_$j ${gameRecord[Day_$j]}"
+done 
+
+echo "Total profit" $( printf "%s\n" ${gameRecord[@]} | awk '{sum+=$0}END{print sum}')
